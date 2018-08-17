@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-
 using GradeBook.Enums;
 using System.Collections.Generic;
 using System.IO;
@@ -11,13 +10,15 @@ namespace GradeBook.GradeBooks
 {
     public abstract class BaseGradeBook
     {
+		public bool IsWeighted { get; set; }
         public string Name { get; set; }
         public List<Student> Students { get; set; }
 		public GradeBookType Type { get; set; }
 
-        public BaseGradeBook(string name)
+        public BaseGradeBook(string name, bool isWeighted)
         {
             Name = name;
+			IsWeighted = isWeighted;
             Students = new List<Student>();
         }
 
@@ -107,17 +108,29 @@ namespace GradeBook.GradeBooks
 
         public virtual double GetGPA(char letterGrade, StudentType studentType)
         {
-            switch (letterGrade)
+			var gpa = 0;
+            switch (gpa)
             {
                 case 'A':
-                    return 4;
+                    gpa = 4;
+					break;
                 case 'B':
-                    return 3;
+                    gpa =  3;
+					break;
                 case 'C':
-                    return 2;
+                    gpa = 2;
+					break;
                 case 'D':
-                    return 1;
+                    gpa = 1;
+					break;
+				case 'F':
+					gpa = 0;
+					break;
             }
+
+			if (IsWeighted && (studentType == StudentType.Honors || studentType == StudentType.DualEnrolled))
+				gpa++;
+
             return 0;
         }
 
